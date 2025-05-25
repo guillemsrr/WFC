@@ -1,6 +1,6 @@
 <p align="center"><img alt="final pipes" src="Images/pipes_max.gif"></p>
 
-# WFCourse
+# WFC
 This repository is properly tagged in case you'd like to follow its development step by step.
 
 The first approach of the algorithm is a simple example of terrain adjacencies (sea, beach, valley, mountain) made of cubes.
