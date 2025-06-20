@@ -13,6 +13,7 @@
 *.log
 /Production/
 /Videos/
+/Assets/TextMesh Pro/
 
 /.idea/
 
