@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using WFCourse.Generation.Cells;
-using WFCourse.Utilities;
+using WFC.Generation.Cells;
+using WFC.Utilities;
 
-namespace WFCourse.Generation.Constraints
+namespace WFC.Generation.Constraints
 {
     public class PerimeterConstraint: ConstraintApplier
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace WFCourse.UI
+namespace WFC.UI
 {
     public class Rotator: MonoBehaviour
     {

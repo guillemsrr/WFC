@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using WFCourse.Modules;
-using WFCourse.ScriptableObjects;
-using WFCourse.Utilities;
+using WFC.ScriptableObjects;
+using WFC.Utilities;
 
-namespace WFCourse
+namespace WFC.Modules
 {
     public class ModuleDataBuilder : MonoBehaviour
     {

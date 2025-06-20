@@ -1,9 +1,8 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
-using WFCourse.ScriptableObjects;
+using WFC.ScriptableObjects;
 
-namespace WFCourse.UI
+namespace WFC.UI
 {
     public class UIController : MonoBehaviour
     {

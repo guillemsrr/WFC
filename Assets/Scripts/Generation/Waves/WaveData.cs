@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using WFCourse.Generation.Cells;
+using WFC.Generation.Cells;
 
-namespace WFCourse.Generation.Waves
+namespace WFC.Generation.Waves
 {
     public class WaveData
     {

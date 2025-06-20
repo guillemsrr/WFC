@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace WFCourse.Utilities
+namespace WFC.Utilities
 {
     public class ScriptableObjectGenerator
     {

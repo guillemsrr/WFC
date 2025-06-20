@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace WFCourse.Modules
+namespace WFC.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "FaceType")]
     public class FaceTypeSO: ScriptableObject

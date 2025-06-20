@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-using WFCourse.Utilities;
+using WFC.ScriptableObjects;
+using WFC.Utilities;
 
-namespace WFCourse.Modules
+namespace WFC.Modules
 {
     public class Face: MonoBehaviour
     {

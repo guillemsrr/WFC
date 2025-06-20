@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace WFCourse
+namespace WFC.Scenes
 {
     public class ScenesInitializer : MonoBehaviour
     {

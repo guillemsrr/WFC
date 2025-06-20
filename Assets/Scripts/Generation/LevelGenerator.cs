@@ -1,13 +1,11 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using WFCourse.Generation.Cells;
-using WFCourse.Generation.Constraints;
-using WFCourse.Generation.Waves;
-using WFCourse.Modules;
-using WFCourse.ScriptableObjects;
+using WFC.Generation;
+using WFC.Generation.Cells;
+using WFC.Generation.Constraints;
+using WFC.Generation.Waves;
+using WFC.Modules;
+using WFC.ScriptableObjects;
 using Random = UnityEngine.Random;
 
 namespace WFCourse.Generation

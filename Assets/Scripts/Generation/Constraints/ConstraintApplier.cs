@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using WFCourse.Generation.Cells;
+using WFC.Generation.Cells;
 
-namespace WFCourse.Generation.Constraints
+namespace WFC.Generation.Constraints
 {
     public interface ConstraintApplier
     {

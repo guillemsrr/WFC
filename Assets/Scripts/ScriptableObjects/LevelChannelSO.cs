@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace WFCourse.ScriptableObjects
+namespace WFC.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Channel/Level")]
     public class LevelChannelSO: ScriptableObject

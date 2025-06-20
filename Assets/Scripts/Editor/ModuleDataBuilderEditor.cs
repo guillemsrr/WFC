@@ -1,7 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using WFC.Modules;
 
-namespace WFCourse.Editor
+namespace WFC.Editor
 {
     [CustomEditor(typeof(ModuleDataBuilder))]
     public class ModuleDataBuilderEditor: UnityEditor.Editor

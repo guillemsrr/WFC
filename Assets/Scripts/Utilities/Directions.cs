@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WFCourse.Utilities
+namespace WFC.Utilities
 {
     public enum Direction
     {

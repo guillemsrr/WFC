@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using WFCourse.Generation.Backtracking;
-using WFCourse.Generation.Cells;
-using WFCourse.Generation.Waves;
-using WFCourse.Utilities;
+using WFC.Generation.Backtracking;
+using WFC.Generation.Cells;
+using WFC.Generation.Waves;
+using WFC.Utilities;
 
-namespace WFCourse.Generation
+namespace WFC.Generation
 {
     public class WaveFunctionCollapse
     {

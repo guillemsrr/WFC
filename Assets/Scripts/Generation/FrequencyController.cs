@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using WFCourse.Generation.Cells;
-using WFCourse.Modules;
+using WFC.Generation.Cells;
+using WFC.Modules;
 
-namespace WFCourse.Generation
+namespace WFC.Generation
 {
     public class FrequencyController
     {

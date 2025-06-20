@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using WFCourse.Modules;
+using WFC.Modules;
 
-namespace WFCourse.Generation.Cells
+namespace WFC.Generation.Cells
 {
     public class CellData
     {

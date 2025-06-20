@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using WFCourse.Modules;
-using WFCourse.Utilities;
+using WFC.Modules;
+using WFC.Utilities;
 
-namespace WFCourse.Generation.Cells
+namespace WFC.Generation.Cells
 {
     public class CellController
     {

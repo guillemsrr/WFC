@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using WFCourse.Modules;
+using WFC.Modules;
 
-namespace WFCourse.ScriptableObjects
+namespace WFC.ScriptableObjects
 {
     public class ModulesDataSO:ScriptableObject
     {

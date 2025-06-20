@@ -1,7 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
-namespace WFCourse.UI
+namespace WFC.UI
 {
     public class CameraController : MonoBehaviour
     {

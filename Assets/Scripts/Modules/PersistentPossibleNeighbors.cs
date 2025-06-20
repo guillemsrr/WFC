@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using WFCourse.Utilities;
+using WFC.Utilities;
 
-namespace WFCourse.Modules
+namespace WFC.Modules
 {
     [System.Serializable]
     public class PersistentPossibleNeighbors

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using WFCourse.Generation.Cells;
+using WFC.Generation.Cells;
 
-namespace WFCourse.Generation
+namespace WFC.Generation
 {
     public class EntropyHeap
     {

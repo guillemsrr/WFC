@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using WFCourse.Utilities;
+using WFC.Utilities;
 
-namespace WFCourse.Modules
+namespace WFC.Modules
 {
     public class ModuleController : MonoBehaviour
     {

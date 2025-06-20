@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using WFCourse.Generation.Cells;
-using WFCourse.Generation.Waves;
+using WFC.Generation.Cells;
+using WFC.Generation.Waves;
 
-namespace WFCourse.Generation.Backtracking
+namespace WFC.Generation.Backtracking
 {
     public class BacktrackingHandler
     {
