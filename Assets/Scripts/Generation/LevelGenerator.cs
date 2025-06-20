@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using WFC.Generation;
 using WFC.Generation.Cells;
 using WFC.Generation.Constraints;
 using WFC.Generation.Waves;
@@ -8,14 +7,15 @@ using WFC.Modules;
 using WFC.ScriptableObjects;
 using Random = UnityEngine.Random;
 
-namespace WFCourse.Generation
+namespace WFC.Generation
 {
     public class LevelGenerator : MonoBehaviour
     {
         private const int MAX_OBSERVATION_TRIES = 10;
-        
+
         [SerializeField] private ModulesDataSO _modulesDataSo;
-        [SerializeField] private Vector3Int _gridDimensions = new Vector3Int(5, 5, 1);
+        [SerializeField] private Vector3Int _gridDimensions = new Vector3Int(5, 5, 5);
+        [SerializeField] private Vector3Int _maxGridDimensions = new Vector3Int(10, 10, 10);
         [SerializeField] private LevelChannelSO _levelChannel;
         [SerializeField] private Transform _generationParent;
         [SerializeField] private float _moduleSize = 2f;
@@ -32,15 +32,19 @@ namespace WFCourse.Generation
 
         private void Awake()
         {
-            _levelChannel.GenerationEvent += Generate;
+            _levelChannel.GenerationEvent += Regenerate;
         }
 
         private void Start()
         {
+            SetRandom();
+            CreateCells();
+            InitializeSubClasses();
+            ApplyConstraints();
             GenerateLevel();
         }
 
-        private void Generate()
+        private void Regenerate()
         {
             Reset();
             GenerateLevel();
@@ -48,28 +52,25 @@ namespace WFCourse.Generation
 
         private void GenerateLevel()
         {
-            SetRandom();
-            CreateCells();
-            InitializeSubClasses();
-            ApplyConstraints();
-            Observe();
-            if (_observationTries == MAX_OBSERVATION_TRIES)
+            if (!Observe())
             {
-                Generate();
+                /*_observationTries++;
+                if (_observationTries < MAX_OBSERVATION_TRIES)
+                {
+                    Regenerate();
+                }*/
+
                 return;
             }
+
             DrawCells();
             CenterPivot();
         }
 
-        private void Observe()
+        private bool Observe()
         {
-            do
-            {
-                _waveFunctionCollapse.Observe();
-                _observationTries++;
-            }
-            while (AreAllCellsAir() && _observationTries < MAX_OBSERVATION_TRIES);
+            bool observation = _waveFunctionCollapse.Observe();
+            return observation && !AreAllCellsAir();
         }
 
         private void SetRandom()
@@ -78,7 +79,7 @@ namespace WFCourse.Generation
             {
                 _seed = Random.Range(0, int.MaxValue);
             }
-            
+
             Random.InitState(_seed);
         }
 
@@ -117,8 +118,8 @@ namespace WFCourse.Generation
                 _frequencyController.SetSpecificElementRandomFrequency(_modulesDatas, _modulesDataSo.AirIndex);
                 _frequencyController.SetOneRandomElementHighFrequency(_modulesDatas);
             }
+
             _frequencyController.CalculateInitialWeight(_wave.Cells.Values);
-            
             _waveFunctionCollapse = new WaveFunctionCollapse(_wave);
         }
 
@@ -126,14 +127,15 @@ namespace WFCourse.Generation
         {
             _wave = new Wave();
             _modulesDatas = new ModuleData[_modulesDataSo.ModuleDatas.Length];
-            for(int i = 0; i< _modulesDataSo.ModuleDatas.Length; i++)
+            for (int i = 0; i < _modulesDataSo.ModuleDatas.Length; i++)
             {
                 _modulesDatas[i] = new ModuleData(_modulesDataSo.ModuleDatas[i]);
             }
 
             if (_fullRandomGeneration)
             {
-                _gridDimensions = new Vector3Int(Random.Range(2, 8), Random.Range(2, 8), Random.Range(2, 8));
+                _gridDimensions = new Vector3Int(Random.Range(2, _maxGridDimensions.x), Random.Range(2,
+                    _maxGridDimensions.y), Random.Range(2, _maxGridDimensions.z));
             }
 
             for (int x = 0; x < _gridDimensions.x; x++)
@@ -163,7 +165,6 @@ namespace WFCourse.Generation
             }
 
             _wave.Cells.Clear();
-            _observationTries = 0;
         }
 
         private void CenterPivot()

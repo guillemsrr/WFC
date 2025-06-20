@@ -14,8 +14,7 @@ namespace WFC.Generation
         private EntropyHeap _entropyHeap;
         private BacktrackingHandler _backtrackingHandler;
 
-
-        private int NumberCells => _uncollapsedCells.Count;
+        private int NumberUncollapsedCells => _uncollapsedCells.Count;
 
         public WaveFunctionCollapse(Wave wave)
         {
@@ -25,9 +24,11 @@ namespace WFC.Generation
             _backtrackingHandler = new BacktrackingHandler(this);
         }
 
-        public void Observe()
+        public bool Observe()
         {
-            while (NumberCells != 0)
+            _backtrackingHandler.AddState(_wave, _uncollapsedCells, _entropyHeap);
+
+            while (NumberUncollapsedCells != 0)
             {
                 CellController randomCell = _entropyHeap.GetCell();
                 if (randomCell == null)
@@ -41,12 +42,31 @@ namespace WFC.Generation
                     _backtrackingHandler.DiscardCurrentState();
                     continue;
                 }
-                Propagate(randomCell);
+
+                Collapse(randomCell);
+                if (!Propagate(randomCell))
+                {
+                    if (_backtrackingHandler.CanRestart)
+                    {
+                        _backtrackingHandler.DiscardCurrentState();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
+
+            return true;
         }
 
         private void Collapse(CellController randomCell)
         {
+            if (!randomCell.CanCollapse)
+            {
+                return;
+            }
+
             randomCell.Collapse();
             RemoveCollapsedCell(randomCell);
         }
@@ -56,7 +76,7 @@ namespace WFC.Generation
             _uncollapsedCells.Remove(randomCell);
         }
 
-        private void Propagate(CellController collapsedCell)
+        private bool Propagate(CellController collapsedCell)
         {
             Queue<CellController> cellsToUpdate = new Queue<CellController>();
             cellsToUpdate.Enqueue(collapsedCell);
@@ -64,9 +84,18 @@ namespace WFC.Generation
             while (cellsToUpdate.Count != 0)
             {
                 CellController cell = cellsToUpdate.Dequeue();
-                Collapse(cell);
-                
-                foreach (KeyValuePair<Direction, Vector3Int> directionVector in Utilities.Directions.DirectionsByVectors)
+                if (!cell.IsCollapsed && cell.OnlyOnePossibility)
+                {
+                    Collapse(cell);
+                }
+
+                if (!cell.IsCollapsed)
+                {
+                    continue;
+                }
+
+                foreach (KeyValuePair<Direction, Vector3Int> directionVector in
+                         Utilities.Directions.DirectionsByVectors)
                 {
                     Vector3Int offset = cell.Position + directionVector.Value;
                     if (!_wave.Cells.ContainsKey(offset))
@@ -75,32 +104,27 @@ namespace WFC.Generation
                     }
 
                     CellController propagatedCell = _wave.Cells[offset];
-                    if (/*propagatedCell.CellData.IsErroneus || */propagatedCell.IsCollapsed)
+                    if (propagatedCell.IsCollapsed)
                     {
                         continue;
                     }
 
-                    if (!cell.IsCollapsed)
+                    bool changed =
+                        propagatedCell.Propagate(directionVector.Key, cell.CellData.CollapsedModuleData.Number);
+                    if (propagatedCell.CellData.IsErroneus)
                     {
-                        return;
+                        return false;
                     }
-                
-                    propagatedCell.Propagate(directionVector.Key, cell.CellData.CollapsedModuleData.Number);
 
-                    if (propagatedCell.OnlyOnePossibility)
+                    if (changed)
                     {
                         cellsToUpdate.Enqueue(propagatedCell);
                     }
-
-                    if (propagatedCell.CellData.IsErroneus)
-                    {
-                        _backtrackingHandler.DiscardCurrentState();
-                        return;
-                    }
                 }
             }
-            
+
             _backtrackingHandler.AddState(_wave, _uncollapsedCells, _entropyHeap);
+            return true;
         }
 
         public void SetState(TrackingState trackingState)

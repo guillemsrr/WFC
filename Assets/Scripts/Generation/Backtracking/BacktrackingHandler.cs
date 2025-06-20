@@ -6,11 +6,13 @@ namespace WFC.Generation.Backtracking
 {
     public class BacktrackingHandler
     {
-        private const int MAX_BACKTRACKING_TRIES = 100;
-        
+        private const int MAX_RESTARTS = 10;
+
         private WaveFunctionCollapse _waveFunctionCollapse;
         private List<TrackingState> _trackingStates;
-        private int _numberTries;
+        private int _numberRestarts;
+
+        public bool CanRestart => _numberRestarts < MAX_RESTARTS;
 
         public BacktrackingHandler(WaveFunctionCollapse waveFunctionCollapse)
         {
@@ -20,13 +22,13 @@ namespace WFC.Generation.Backtracking
 
         public void DiscardCurrentState()
         {
-            _numberTries++;
-
-            if (_numberTries > MAX_BACKTRACKING_TRIES)
+            int lastIndex = _trackingStates.Count - 1;
+            if (lastIndex == 0)
             {
-                Restart();
+                _numberRestarts++;
             }
-            _waveFunctionCollapse.SetState(_trackingStates[_trackingStates.Count - 1]);
+
+            _waveFunctionCollapse.SetState(_trackingStates[lastIndex]);
         }
 
         public void AddState(Wave wave, List<CellController> uncollapsedCells, EntropyHeap entropyHeap)
@@ -35,7 +37,7 @@ namespace WFC.Generation.Backtracking
             _trackingStates.Add(state);
         }
 
-        private void Restart()
+        public void Restart()
         {
             TrackingState firstState = _trackingStates[0];
             _trackingStates.Clear();

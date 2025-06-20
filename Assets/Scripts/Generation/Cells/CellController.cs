@@ -16,6 +16,9 @@ namespace WFC.Generation.Cells
         public event CellPropagated CellPropagatedEvent;
 
         public Vector3Int Position { get; }
+        public bool CanCollapse => !IsCollapsed && HasPossibilities;
+        public bool HasPossibilities => CellData.PossibleModules.Count != 0;
+
         public bool IsCollapsed => CellData.CollapsedModuleData != null;
         public bool OnlyOnePossibility => CellData.PossibleModules.Count == 1;
         public List<ModuleData> Possibilities => CellData.PossibleModules;
@@ -63,7 +66,7 @@ namespace WFC.Generation.Cells
             return CellData.PossibleModules[0];
         }
 
-        public void Propagate(Direction direction, int collapsedModuleDataNumber)
+        public bool Propagate(Direction direction, int collapsedModuleDataNumber)
         {
             Queue<ModuleData> impossibleModules = new Queue<ModuleData>();
             foreach (ModuleData possibleModule in CellData.PossibleModules)
@@ -75,6 +78,7 @@ namespace WFC.Generation.Cells
                 }
             }
 
+            bool changed = impossibleModules.Count != 0;
             foreach (ModuleData impossibleModule in impossibleModules)
             {
                 RemoveImpossibleModule(impossibleModule);
@@ -85,7 +89,12 @@ namespace WFC.Generation.Cells
                 CellData.IsErroneus = true;
             }
 
-            CellPropagatedEvent?.Invoke(this);
+            if (changed)
+            {
+                CellPropagatedEvent?.Invoke(this);
+            }
+
+            return changed;
         }
 
         private void RemoveImpossibleModule(ModuleData impossibleModule)
