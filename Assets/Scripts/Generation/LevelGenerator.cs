@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using WFC.Generation.Cells;
 using WFC.Generation.Constraints;
 using WFC.Generation.Waves;
@@ -30,6 +31,11 @@ namespace WFC.Generation
         private ModuleData[] _modulesDatas;
         private int _observationTries;
 
+        public UnityAction OnGenerationStartEvent;
+        public UnityAction OnGeneratedEvent;
+
+        public Vector3Int GridDimensions => _gridDimensions;
+
         private void Awake()
         {
             _levelChannel.GenerationEvent += Regenerate;
@@ -38,13 +44,17 @@ namespace WFC.Generation
         private void Start()
         {
             SetRandom();
-            CreateCells();
-            InitializeSubClasses();
-            ApplyConstraints();
             GenerateLevel();
         }
 
         private void Regenerate()
+        {
+            _observationTries = 0;
+
+            RestartGeneration();
+        }
+
+        private void RestartGeneration()
         {
             Reset();
             GenerateLevel();
@@ -52,19 +62,26 @@ namespace WFC.Generation
 
         private void GenerateLevel()
         {
+            OnGenerationStartEvent?.Invoke();
+            CreateCells();
+            InitializeSubClasses();
+            ApplyConstraints();
+
             if (!Observe())
             {
-                /*_observationTries++;
+                _observationTries++;
                 if (_observationTries < MAX_OBSERVATION_TRIES)
                 {
-                    Regenerate();
-                }*/
+                    RestartGeneration();
+                }
 
                 return;
             }
 
             DrawCells();
             CenterPivot();
+
+            OnGeneratedEvent?.Invoke();
         }
 
         private bool Observe()
@@ -164,7 +181,12 @@ namespace WFC.Generation
                 DestroyImmediate(_generationParent.GetChild(0).gameObject);
             }
 
-            _wave.Cells.Clear();
+            foreach (KeyValuePair<Vector3Int, CellController> cell in _wave.Cells)
+            {
+                cell.Value.Reset(_modulesDatas);
+            }
+
+            _waveFunctionCollapse = new WaveFunctionCollapse(_wave);
         }
 
         private void CenterPivot()
@@ -178,6 +200,10 @@ namespace WFC.Generation
         {
             foreach (CellController cell in _wave.Cells.Values)
             {
+                if (!cell.IsCollapsed)
+                {
+                    return false;
+                }
                 if (cell.CellData.CollapsedModuleData.Number != _modulesDataSo.AirIndex)
                 {
                     return false;

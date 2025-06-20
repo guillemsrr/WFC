@@ -4,7 +4,7 @@ using UnityEngine.Events;
 namespace WFC.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Channel/Level")]
-    public class LevelChannelSO: ScriptableObject
+    public class LevelChannelSO : ScriptableObject
     {
         public UnityAction GenerationEvent;
 

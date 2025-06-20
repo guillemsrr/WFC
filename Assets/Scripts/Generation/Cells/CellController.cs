@@ -31,7 +31,7 @@ namespace WFC.Generation.Cells
             Position = position;
             _size = size;
 
-            CellData = new CellData(moduleDatas);
+            Reset(moduleDatas);
         }
 
         public void Collapse()
@@ -121,6 +121,11 @@ namespace WFC.Generation.Cells
             CellData.TotalWeight = totalWeight;
             CellData.SumOfLogWeight = logWeight;
             _entropyNoise = noise;
+        }
+
+        public void Reset(ModuleData[] moduleDatas)
+        {
+            CellData = new CellData(moduleDatas);
         }
     }
 }
